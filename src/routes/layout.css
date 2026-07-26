@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Homenaje&family=Ibarra+Real+Nova:ital,wght@0,400..700;1,400..700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+    --color-background: #F8F2DC;
+
+    --color-accent: #CD4631;
+    --color-accent-lg: #d76a5a;
+    --color-accent-xl: #e19083;
+    --color-neutral: #1F2E2A;
+
+    --color-success: #10b981;
+    --color-error: #ef4444;
+
+    --font-primary: "Ibarra Real Nova", serif;
+    --font-secondary: "Homenaje", sans-serif;
+}
+
+@layer base {
+    * {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: var(--font-secondary);
+        background-color: var(--color-background);
+        color: var(--color-neutral);
+        overflow-x: hidden;
+    }
+
+    button, a {
+        cursor: pointer;
+    }
+}
