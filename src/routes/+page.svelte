@@ -26,7 +26,7 @@
 		const wide = window.matchMedia('(min-width: 768px)');
 		reducedMotion = reduce.matches;
 
-		const setInset = () => (maxInset = wide.matches ? 16 : 8);
+		const setInset = () => (maxInset = wide.matches ? 24 : 8);
 		setInset();
 
 		let ticking = false;
@@ -89,12 +89,11 @@
 		  video reads as its background, matching the reference site. Replace with
 		  real sections as they're built.
 		-->
-		<section class="flex min-h-screen w-full items-center justify-center px-6 py-32">
-			<div class="max-w-3xl text-center text-neutral">
-				<p class="font-secondary text-sm tracking-[0.3em] uppercase opacity-70">The ritual</p>
-				<h2 class="mt-6 font-primary text-4xl leading-tight sm:text-5xl md:text-6xl">
-					A scent composed like weather &mdash; atmospheric, shifting, impossible to
-					place and impossible to forget.
+		<section class="flex min-h-screen w-full items-center justify-center px-6 md:px-32 py-32">
+			<div class="font-secondary text-center text-black flex justify-center items-start gap-8 md:gap-24 flex-col md:flex-row">
+				<p class="text-2xl md:text-4xl flex-1 opacity-70">Our Beliefs</p>
+				<h2 class="leading-tight flex-9 text-3xl md:text-5xl text-left">
+					At ÆTHERA, every fragrance begins with a careful selection of nature's finest ingredients. Sourced from trusted growers and expertly blended, each note is chosen for its purity, character, and timeless elegance. The result is a luxurious scent that unfolds beautifully on the skin, leaving behind a sophisticated impression that feels both personal and unforgettable.
 				</h2>
 			</div>
 		</section>
