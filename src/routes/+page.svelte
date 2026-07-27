@@ -1,7 +1,9 @@
 <script lang="ts">
 	import Hero from '$lib/components/hero.svelte';
+	import Beliefs from '$lib/components/beliefs.svelte';
 	import videoBg from '$lib/assets/abstract-video.mp4';
 	import { onMount } from 'svelte';
+    // import HowWeWork from '$lib/components/how-we-work.svelte';
 
 	// The video background starts framed - inset from the screen edges with
 	// rounded corners (the original p-2 / md:p-4 look). As the user scrolls
@@ -85,17 +87,11 @@
 		<Hero />
 
 		<!--
-		  Content that scrolls up over the pinned video. Kept transparent so the
-		  video reads as its background, matching the reference site. Replace with
-		  real sections as they're built.
+		  Scrolls up over the pinned video and then parks there, writing itself
+		  out as you keep scrolling. Its own pin releases at the same point the
+		  video's does, so the two clear the screen together.
 		-->
-		<section class="flex min-h-screen w-full items-center justify-center px-6 md:px-32 py-32">
-			<div class="font-secondary text-center text-black flex justify-center items-start gap-8 md:gap-24 flex-col md:flex-row">
-				<p class="text-2xl md:text-4xl flex-1 opacity-70">Our Beliefs</p>
-				<h2 class="leading-tight flex-9 text-3xl md:text-5xl text-left">
-					At ÆTHERA, every fragrance begins with a careful selection of nature's finest ingredients. Sourced from trusted growers and expertly blended, each note is chosen for its purity, character, and timeless elegance. The result is a luxurious scent that unfolds beautifully on the skin, leaving behind a sophisticated impression that feels both personal and unforgettable.
-				</h2>
-			</div>
-		</section>
+		<Beliefs />
 	</main>
+	<!-- <HowWeWork /> -->
 </div>
