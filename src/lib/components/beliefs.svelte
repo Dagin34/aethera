@@ -127,12 +127,12 @@
 		class:overflow-hidden={scrubbing}
 		class:min-h-screen={!scrubbing}
 	>
-		<div class="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-transparent to-background/20"></div>
+		<div class="pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-transparent to-white/20"></div>
 
 		{#if scrubbing}
 			<div class="mx-auto w-full max-w-6xl">
 				<div
-					class="grid font-secondary text-black text-[0.6875rem] tracking-[0.22em] uppercase md:text-xs"
+					class="grid font-secondary text-black text-[0.6875rem] tracking-[0.22em] uppercase md:text-sm font-black"
 					style="grid-template-columns: {spans.map((s) => `${s}fr`).join(' ')};"
 				>
 					{#each written as passage, i (passage.label)}
@@ -146,7 +146,7 @@
 				</div>
 
 				<div
-					class="relative mt-3 h-px w-full bg-neutral/20"
+					class="relative mt-3 h-px w-full bg-black/50"
 					role="progressbar"
 					aria-label="Progress through our beliefs"
 					aria-valuemin={0}
@@ -160,7 +160,7 @@
 
 					{#each starts.slice(1) as start (start)}
 						<span
-							class="absolute top-1/2 h-2 w-px -translate-y-1/2 bg-neutral/25"
+							class="absolute top-1/2 h-2 w-px -translate-y-1/2 bg-black/50"
 							style="left: {start * 100}%;"
 						></span>
 					{/each}
@@ -177,7 +177,7 @@
 			<div class="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,4.5fr)] md:gap-16">
 				<h2
 					id="beliefs-heading"
-					class="font-secondary text-xs tracking-[0.22em] text-neutral/70 uppercase md:pt-3 md:text-sm"
+					class="font-secondary text-sm font-black tracking-[0.22em] text-black/70 uppercase md:pt-3 md:text-sm"
 				>
 					Who are we?
 				</h2>
@@ -185,7 +185,7 @@
 				<div class="grid gap-8">
 					{#each written as passage, i (passage.label)}
 						<p
-							class="passage font-secondary text-[clamp(1.3rem,2.6vw,2.6rem)] leading-[1.3] text-balance"
+							class="passage font-black text-[clamp(1.3rem,2.6vw,2.6rem)] leading-[1.3] text-balance"
 							style="--reveal: {stages[i].reveal}; --exit: {stages[i].exit};"
 						>
 							<span class="sr-only">{passage.text}</span>

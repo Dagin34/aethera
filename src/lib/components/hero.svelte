@@ -5,7 +5,7 @@
 
 	const coords = new Spring({ x: 0, y: 0 }, {
 		stiffness: 0.05,
-		damping: 0.25
+		damping: 0.5
 	});
 
 	function handleMouseMove(e: MouseEvent) {
@@ -15,8 +15,8 @@
 		const centerX = left + width / 2;
 		const centerY = top + height / 2;
 
-		const moveX = (e.clientX - centerX) / 30;
-		const moveY = (e.clientY - centerY) / 30;
+		const moveX = (e.clientX - centerX) / 3;
+		const moveY = (e.clientY - centerY) / 3;
 
 		coords.target = { x: moveX, y: moveY };
 	}
@@ -33,7 +33,7 @@
 	aria-label="Product Showcase"
 >
 	<h1
-		class="pointer-events-none absolute inset-0 z-0 flex select-none items-center justify-center px-4 text-center font-primary text-[clamp(2.75rem,15vw,30rem)] leading-none tracking-tight text-black/85 [text-shadow:0_10px_40px_rgba(0,0,0,0.35)]"
+		class="pointer-events-none absolute inset-0 z-0 flex select-none items-center justify-center px-4 text-center font-primary text-[clamp(2.75rem,15vw,30rem)] leading-none tracking-tight text-background [text-shadow:0_10px_40px_rgba(0,0,0,0.35)]"
 	>
 		ÆTHERA
 	</h1>
