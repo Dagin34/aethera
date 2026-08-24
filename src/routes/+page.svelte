@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Hero from '$lib/components/hero.svelte';
 	import Beliefs from '$lib/components/beliefs.svelte';
+	import Collection from '$lib/components/collection.svelte';
+	import { viridis } from '$lib/collections';
 	import videoBg from '$lib/assets/abstract-video.mp4';
 	import { onMount } from 'svelte';
 	import Footer from '$lib/components/footer.svelte';
@@ -68,10 +70,12 @@
 		</div>
 	</div>
 
-	<main class="mt-[-100vh] flex flex-col items-center justify-center">
+	<main class="mt-[-100vh] flex w-full flex-col items-center justify-center">
 		<Hero />
 
 		<Beliefs />
+
+		<Collection collection={viridis} />
 	</main>
 	<Footer />
 </div>

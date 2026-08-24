@@ -4,8 +4,8 @@
 	import { Spring } from 'svelte/motion';
 
 	const coords = new Spring({ x: 0, y: 0 }, {
-		stiffness: 0.05,
-		damping: 0.5
+		stiffness: 0.01,
+		damping: 2
 	});
 
 	function handleMouseMove(e: MouseEvent) {
