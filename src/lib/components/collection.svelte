@@ -37,6 +37,18 @@
 	/** Depth of the soft edge a note dissolves through as the reel rolls. */
 	const FADE = 34;
 
+	/** Relative luminance of the ground. The polarity of the whole section falls
+	 *  out of the one colour it is built on, rather than a second field to keep
+	 *  in step with it. */
+	function luminance(hex: string) {
+		const n = parseInt(hex.slice(1), 16);
+		const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => {
+			const c = v / 255;
+			return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+		});
+		return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+	}
+
 	const clamp = (n: number, min = 0, max = 1) => Math.min(Math.max(n, min), max);
 	const easeOut = (t: number) => 1 - (1 - t) ** 3;
 	const easeInOut = (t: number) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
@@ -44,6 +56,11 @@
 	const letters = $derived([...collection.name]);
 	const phases = $derived(collection.phases);
 	const count = $derived(phases.length);
+
+	/** A lit ground carries dark type, and its film blooms instead of dimming. */
+	const lit = $derived(luminance(collection.tone.deep) > 0.4);
+	/** -1 sends the bottle left and the notes right; +1 mirrors the whole thing. */
+	const dir = $derived(collection.lean === 'right' ? 1 : -1);
 
 	let wrapper: HTMLElement;
 	let body: HTMLElement;
@@ -113,11 +130,11 @@
 		const bw = body.clientWidth;
 		const bh = body.clientHeight;
 
-		// The reel starts flush to the bottom-left of the stage and ends in the right
-		// column, vertically centred.
-		shiftX = bw * 0.52;
+		// The reel starts flush to the bottom corner the bottle is heading for and
+		// crosses to the opposite column, ending vertically centred.
+		shiftX = -bw * 0.52 * dir;
 		shiftY = -(bh - noteHeight - FADE * 2) / 2;
-		productX = -bw * 0.26;
+		productX = bw * 0.26 * dir;
 	}
 
 	function handleMouseMove(e: MouseEvent) {
@@ -229,8 +246,9 @@
 		: ''}"
 >
 	<div
-		data-nav="dark"
+		data-nav={lit ? 'light' : 'dark'}
 		class="stage w-full overflow-hidden"
+		class:lit
 		class:h-screen={scrubbing}
 		class:min-h-screen={!scrubbing}
 		style="position: {scrubbing ? 'sticky' : 'relative'}; top: 0;{scrubbing
@@ -250,7 +268,9 @@
 				preload="metadata"
 				class="absolute inset-0 h-full w-full object-cover"
 				style="transform: translateY({(1 - open) * 6}vh) scale({1.06 +
-					mood * 0.07}); filter: brightness({1 - mood * 0.22}) saturate({1 - mood * 0.15});"
+					mood * 0.07}); filter: brightness({lit
+					? 1 + mood * 0.12
+					: 1 - mood * 0.22}) {lit ? `contrast(${1 - mood * 0.12})` : `saturate(${1 - mood * 0.15})`};"
 			></video>
 			<div class="veil"></div>
 			<div class="vignette"></div>
@@ -276,6 +296,7 @@
 			<div
 				bind:this={body}
 				class="body relative min-h-0 flex-1"
+				class:leans-right={collection.lean === 'right'}
 				class:flowing={!scrubbing}
 				style={scrubbing ? `--lift: ${(1 - rise) * (noteHeight + GAP)}px;` : undefined}
 			>
@@ -379,14 +400,28 @@
 		color: var(--ink);
 	}
 
-	/* Two scrims: a vertical one to seat the type, a vignette to close the frame in. */
+	/* Two scrims: a vertical one to seat the type, a vignette to close the frame in.
+	   A lit ground hazes over much more of its film — dark type needs the help,
+	   and the section reads as light rather than as a photograph. */
+	.stage {
+		--haze: 20%;
+		--quiet: 62%;
+		--aside: 58%;
+	}
+
+	.stage.lit {
+		--haze: 62%;
+		--quiet: 80%;
+		--aside: 74%;
+	}
+
 	.veil {
 		position: absolute;
 		inset: 0;
 		background: linear-gradient(
 			to bottom,
 			color-mix(in oklab, var(--deep) 82%, transparent) 0%,
-			color-mix(in oklab, var(--deep) 20%, transparent) 44%,
+			color-mix(in oklab, var(--deep) var(--haze), transparent) 44%,
 			color-mix(in oklab, var(--deep) 90%, transparent) 100%
 		);
 	}
@@ -417,7 +452,7 @@
 		font-size: 0.6875rem;
 		letter-spacing: 0.28em;
 		text-transform: uppercase;
-		color: color-mix(in oklab, var(--ink) 58%, transparent);
+		color: color-mix(in oklab, var(--ink) var(--aside), transparent);
 	}
 
 	.tagline {
@@ -467,8 +502,13 @@
 	.bottle {
 		position: relative;
 		z-index: 1;
-		filter: drop-shadow(0 30px 60px rgb(0 0 0 / 0.55));
+		filter: drop-shadow(0 30px 60px rgb(0 0 0 / var(--cast, 0.55)));
 		will-change: transform;
+	}
+
+	/* On a lit field the bottle casts, rather than sinking into, its ground. */
+	.lit .bottle {
+		--cast: 0.22;
 	}
 
 	.reel {
@@ -496,6 +536,12 @@
 	@media (min-width: 1024px) {
 		.reel {
 			width: min(30rem, 46%);
+		}
+
+		/* Mirrored: the notes start under the corner the bottle is about to leave. */
+		.leans-right .reel {
+			inset-inline-start: auto;
+			inset-inline-end: 0;
 		}
 	}
 
@@ -543,7 +589,7 @@
 		font-family: var(--font-primary);
 		font-size: 0.9375rem;
 		line-height: 1.6;
-		color: color-mix(in oklab, var(--ink) 62%, transparent);
+		color: color-mix(in oklab, var(--ink) var(--quiet), transparent);
 	}
 
 	/* Without the scrub there is no fixed-height stage to fill, so everything

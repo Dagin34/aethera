@@ -16,6 +16,9 @@
 
 	/** How long the curtain takes to cross the screen. Kept in step with --curtain below. */
 	const CURTAIN = 760;
+	/** How long the ink keeps watching after a scroll stops, in ms. Long enough to
+	 *  outlast the easing the sections carry on with once the wheel is still. */
+	const SETTLE = 900;
 	/** Clearance the bar keeps from the film's rounded corner while it is tucked
 	 *  inside the frame, in px. Enough that neither end sits on the curve. */
 	const TUCK_X = 18;
@@ -95,20 +98,27 @@
 	}
 
 	onMount(() => {
-		let frame = 0;
+		let watch = 0;
+		let until = 0;
+
+		// Sections keep easing for a moment after the scroll that started them, so
+		// the ink has to keep looking. Stopping at the scroll event itself leaves it
+		// stale whenever a curtain finishes crossing the bar after the wheel does.
+		function keepLooking() {
+			sample();
+			watch = performance.now() < until ? requestAnimationFrame(keepLooking) : 0;
+		}
+
 		function onScroll() {
-			if (frame) return;
-			frame = requestAnimationFrame(() => {
-				sample();
-				frame = 0;
-			});
+			until = performance.now() + SETTLE;
+			if (!watch) watch = requestAnimationFrame(keepLooking);
 		}
 
 		sample();
 		window.addEventListener('scroll', onScroll, { passive: true });
 		window.addEventListener('resize', onScroll);
 		return () => {
-			if (frame) cancelAnimationFrame(frame);
+			if (watch) cancelAnimationFrame(watch);
 			clearTimeout(resample);
 			window.removeEventListener('scroll', onScroll);
 			window.removeEventListener('resize', onScroll);
