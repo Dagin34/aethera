@@ -114,6 +114,7 @@
 <section
 	bind:this={wrapper}
 	aria-labelledby="beliefs-heading"
+	data-nav="light"
 	class="relative w-full shrink-0"
 	style={scrubbing
 		? `height: calc(100vh + ${count * SCREENS_PER_PASSAGE * 100}vh)`

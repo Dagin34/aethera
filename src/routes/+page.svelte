@@ -6,18 +6,24 @@
 	import videoBg from '$lib/assets/abstract-video.mp4';
 	import { onMount } from 'svelte';
 	import Footer from '$lib/components/footer.svelte';
+	import { frame } from '$lib/frame.svelte';
 
-	let scrollProgress = $state(0);
+	// Published rather than kept local: the bar sits inside this frame until it
+	// unwraps, so it has to read the same numbers.
+	frame.active = true;
+
 	let reducedMotion = $state(false);
 	let maxInset = $state(16); // px — matches the original p-4 frame on desktop
 
 	function update() {
 		if (reducedMotion) {
-			scrollProgress = 1;
+			frame.progress = 1;
+			frame.inset = 0;
 			return;
 		}
 		const distance = window.innerHeight * 0.5; // unwrap over the first half-screen
-		scrollProgress = Math.min(window.scrollY / distance, 1);
+		frame.progress = Math.min(window.scrollY / distance, 1);
+		frame.inset = maxInset * (1 - frame.progress);
 	}
 
 	onMount(() => {
@@ -46,17 +52,17 @@
 		window.addEventListener('scroll', onScroll, { passive: true });
 		window.addEventListener('resize', onResize);
 		return () => {
+			frame.active = false;
 			window.removeEventListener('scroll', onScroll);
 			window.removeEventListener('resize', onResize);
 		};
 	});
 
-	const inset = $derived(maxInset * (1 - scrollProgress)); // px
-	const radius = $derived(2 * (1 - scrollProgress)); // rem
+	const radius = $derived(2 * (1 - frame.progress)); // rem
 </script>
 
 <div class="relative">
-	<div class="sticky top-0 -z-10 box-border h-screen w-full" style="padding: {inset}px;">
+	<div class="sticky top-0 -z-10 box-border h-screen w-full" style="padding: {frame.inset}px;">
 		<div class="relative h-full w-full overflow-hidden" style="border-radius: {radius}rem;">
 			<video
 				src={videoBg}

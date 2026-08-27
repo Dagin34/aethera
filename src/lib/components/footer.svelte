@@ -17,7 +17,7 @@
 	const year = new Date().getFullYear();
 </script>
 
-<footer class="relative overflow-hidden bg-neutral text-background">
+<footer data-nav="dark" class="relative overflow-hidden bg-neutral text-background">
 	<div class="pointer-events-none absolute inset-0" aria-hidden="true">
 		<img src={abstractImg} alt="" class="h-full w-full object-cover opacity-20 mix-blend-screen" />
 		<div class="absolute inset-0 bg-black/80"></div>

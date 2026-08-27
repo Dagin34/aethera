@@ -31,6 +31,7 @@
 	onmousemove={handleMouseMove}
 	onmouseleave={handleMouseLeave}
 	aria-label="Product Showcase"
+	data-nav="dark"
 >
 	<h1
 		class="pointer-events-none absolute inset-0 z-0 flex select-none items-center justify-center px-4 text-center font-primary text-[clamp(2.75rem,15vw,30rem)] leading-none tracking-tight text-background [text-shadow:0_10px_40px_rgba(0,0,0,0.35)]"

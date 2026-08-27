@@ -229,6 +229,7 @@
 		: ''}"
 >
 	<div
+		data-nav="dark"
 		class="stage w-full overflow-hidden"
 		class:h-screen={scrubbing}
 		class:min-h-screen={!scrubbing}
@@ -264,19 +265,11 @@
 		{/if}
 
 		<div
-			class="relative mx-auto flex w-full max-w-[100rem] flex-col px-6 pt-6 pb-8 md:px-12 md:pt-8 md:pb-10 lg:px-20"
+			class="relative mx-auto flex w-full max-w-[100rem] flex-col px-6 pt-24 pb-8 md:px-12 md:pt-28 md:pb-10 lg:px-20"
 			class:h-full={scrubbing}
 			class:min-h-screen={!scrubbing}
 		>
 			<div class="shrink-0" style="opacity: {arrive};">
-				<div class="masthead">
-					<span>ÆTHERA — {collection.name}</span>
-					<span class="hidden sm:inline">{collection.meta}</span>
-				</div>
-				<div
-					class="mt-3 h-px w-full origin-left bg-[color-mix(in_oklab,var(--ink)_22%,transparent)]"
-					style="transform: scaleX({arrive});"
-				></div>
 				<p class="tagline" style="opacity: {1 - taglineOut};">{collection.tagline}</p>
 			</div>
 
@@ -290,7 +283,7 @@
 					id="{collection.slug}-heading"
 					class="wordmark"
 					style={scrubbing
-						? `--mark: ${(12 - 4.5 * rise).toFixed(1)}%; transform: translate(${productX * slide * 0.85}px, ${(1 - arrive) * 1.5}rem);`
+						? `--mark: ${(15 - 5 * rise).toFixed(1)}%; transform: translate(${productX * slide * 0.85}px, ${(1 - arrive) * 1.5}rem);`
 						: undefined}
 				>
 					<span class="sr-only">{collection.name}</span>
@@ -346,7 +339,9 @@
 				</div>
 			</div>
 
-			<div class="flex shrink-0 items-end justify-end gap-8" style="opacity: {arrive};">
+			<div class="flex shrink-0 items-end justify-between gap-8" style="opacity: {arrive};">
+				<p class="meta hidden sm:block">{collection.meta}</p>
+
 				<div class="flex flex-col items-end gap-5">
 					{#if scrubbing}
 						<div
@@ -417,11 +412,7 @@
 			0 0 44px 6px color-mix(in oklab, var(--glow) 22%, transparent);
 	}
 
-	.masthead {
-		display: flex;
-		align-items: baseline;
-		justify-content: space-between;
-		gap: 1rem;
+	.meta {
 		font-family: var(--font-secondary);
 		font-size: 0.6875rem;
 		letter-spacing: 0.28em;
@@ -430,7 +421,6 @@
 	}
 
 	.tagline {
-		margin-top: clamp(1.25rem, 3vh, 2.25rem);
 		text-align: center;
 		font-family: var(--font-primary);
 		font-style: italic;
@@ -449,12 +439,13 @@
 		justify-content: center;
 		/* Lifted off centre so it sits behind the bottle's shoulder, not its label. */
 		padding-bottom: calc(13% + var(--lift, 0px) * 0.5);
+		font-family: var(--font-primary);
 		font-size: clamp(3.25rem, 11.5vw, 13rem);
 		line-height: 1;
-		letter-spacing: 0.08em;
+		letter-spacing: 0.03em;
 		white-space: nowrap;
 		/* Steps back once the notes take the right-hand column. */
-		color: color-mix(in oklab, var(--ink) var(--mark, 12%), transparent);
+		color: color-mix(in oklab, var(--ink) var(--mark, 15%), transparent);
 		user-select: none;
 		pointer-events: none;
 	}
