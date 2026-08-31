@@ -349,9 +349,9 @@
 							<div bind:this={phaseEls[i]}>
 								<p class="time">{phase.time}</p>
 								<p class="notes">
-									{#each phase.notes as note, j (note)}<span>{note}</span>{#if j < phase.notes.length - 1}<i
-												aria-hidden="true">·</i
-											>{/if}{/each}
+									{#each phase.notes as note, j (note)}<span
+											>{note}{#if j < phase.notes.length - 1}<i aria-hidden="true">·</i>{/if}</span
+										>{/each}
 								</p>
 								<p class="line">{phase.text}</p>
 							</div>
@@ -535,7 +535,7 @@
 
 	@media (min-width: 1024px) {
 		.reel {
-			width: min(30rem, 46%);
+			width: min(38rem, 50%);
 		}
 
 		/* Mirrored: the notes start under the corner the bottle is about to leave. */
@@ -564,31 +564,40 @@
 
 	.time {
 		font-family: var(--font-secondary);
-		font-size: 0.6875rem;
+		font-size: 0.8125rem;
 		letter-spacing: 0.28em;
 		text-transform: uppercase;
 		color: var(--glow);
 	}
 
 	.notes {
-		margin-top: 0.75rem;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		column-gap: 0.55em;
+		margin-top: 0.9rem;
 		font-family: var(--font-primary);
-		font-size: clamp(1.05rem, 1.9vw, 1.65rem);
-		line-height: 1.35;
+		font-size: clamp(1.35rem, 2.5vw, 2.3rem);
+		line-height: 1.3;
+	}
+
+	/* A note breaks between its neighbours, never through its own name. */
+	.notes span {
+		white-space: nowrap;
 	}
 
 	.notes i {
 		font-style: normal;
-		margin-inline: 0.6em;
+		margin-inline-start: 0.55em;
 		color: color-mix(in oklab, var(--ink) 34%, transparent);
 	}
 
 	.line {
-		margin-top: 0.65rem;
-		max-width: 46ch;
+		margin-top: 0.85rem;
+		max-width: 42ch;
 		font-family: var(--font-primary);
-		font-size: 0.9375rem;
-		line-height: 1.6;
+		font-size: clamp(1rem, 1.15vw, 1.2rem);
+		line-height: 1.55;
 		color: color-mix(in oklab, var(--ink) var(--quiet), transparent);
 	}
 
