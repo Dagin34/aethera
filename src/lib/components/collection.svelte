@@ -59,6 +59,8 @@
 
 	/** A lit ground carries dark type, and its film blooms instead of dimming. */
 	const lit = $derived(luminance(collection.tone.deep) > 0.4);
+	/** How hard the glow burns behind the bottle. Only a dark ground can hold a light. */
+	const halo = $derived(lit ? 0 : (collection.tone.halo ?? 0));
 	/** -1 sends the bottle left and the notes right; +1 mirrors the whole thing. */
 	const dir = $derived(collection.lean === 'right' ? 1 : -1);
 
@@ -273,7 +275,7 @@
 					: 1 - mood * 0.22}) {lit ? `contrast(${1 - mood * 0.12})` : `saturate(${1 - mood * 0.15})`};"
 			></video>
 			<div class="veil"></div>
-			<div class="vignette"></div>
+			<div class="vignette" style="--close: {mood};"></div>
 		</div>
 
 		{#if scrubbing && open < 1}
@@ -320,6 +322,15 @@
 					class="product"
 					style={scrubbing ? `transform: translateX(${productX * slide}px);` : undefined}
 				>
+					{#if halo}
+						<div
+							class="halo"
+							aria-hidden="true"
+							style="opacity: {arrive * halo * (0.5 + 0.5 * mood)}; transform: scale({0.88 +
+								mood * 0.3});"
+						></div>
+					{/if}
+
 					<img
 						src={collection.bottle}
 						alt={collection.bottleAlt}
@@ -430,10 +441,27 @@
 		position: absolute;
 		inset: 0;
 		background: radial-gradient(
-			120% 82% at 50% 46%,
+			calc(120% - 24% * var(--close, 0)) calc(82% - 16% * var(--close, 0)) at 50% 46%,
 			transparent 32%,
-			color-mix(in oklab, var(--deep) 72%, transparent) 100%
+			color-mix(in oklab, var(--deep) calc(72% + 16% * var(--close, 0)), transparent) 100%
 		);
+	}
+
+	/* A low ember behind the bottle — the one light the section is lit by. It sits
+	   over the scrims rather than under them, so it reads as burning through the
+	   film rather than being hazed over by it. */
+	.halo {
+		position: absolute;
+		inset: 0 0 var(--lift, 0px) 0;
+		z-index: 0;
+		background: radial-gradient(
+			34% 30% at 50% 52%,
+			color-mix(in oklab, var(--glow) 60%, transparent) 0%,
+			color-mix(in oklab, var(--glow) 22%, transparent) 46%,
+			transparent 72%
+		);
+		filter: blur(8px);
+		will-change: opacity, transform;
 	}
 
 	/* The leading edge of the curtain as it rises over the section above. */

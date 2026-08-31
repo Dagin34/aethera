@@ -2,6 +2,8 @@ import viridisVideo from '$lib/assets/flavors/02-virdis-concept-bg.mp4';
 import viridisBottle from '$lib/assets/flavors/virdis-collection.png';
 import aurelisVideo from '$lib/assets/flavors/01-aurelis-concept-bg.mp4';
 import aurelisBottle from '$lib/assets/flavors/aurelis-collection.png';
+import umbrisVideo from '$lib/assets/flavors/03-umbris-concept-bg.mp4';
+import umbrisBottle from '$lib/assets/flavors/umbris-collection.png';
 
 /** One movement of the dry-down — what the fragrance is doing at a given hour. */
 export type Phase = {
@@ -26,8 +28,12 @@ export type Collection = {
 	lean: 'left' | 'right';
 	/** Per-collection grade. `deep` is the ground, `glow` the single warm point of
 	 *  light. A pale `deep` inverts the section: dark type on a lit field, and a
-	 *  film that blooms rather than dims as the fragrance dries down. */
-	tone: { deep: string; ink: string; glow: string };
+	 *  film that blooms rather than dims as the fragrance dries down.
+	 *
+	 *  `halo` makes that point of light literal — how strongly the glow burns
+	 *  behind the bottle, 0 to 1. Worth having only where the ground is dark
+	 *  enough for a light to be visible in it; defaults to none. */
+	tone: { deep: string; ink: string; glow: string; halo?: number };
 };
 
 export const viridis: Collection = {
@@ -88,4 +94,34 @@ export const aurelis: Collection = {
 	bottleAlt: 'The ÆTHERA Aurelis extrait de parfum, in amber glass lit from within',
 	lean: 'right',
 	tone: { deep: '#EFDFBB', ink: '#2A1A0B', glow: '#B4531C' }
+};
+
+export const umbris: Collection = {
+	slug: 'umbris',
+	name: 'UMBRIS',
+	meta: 'Extrait de Parfum · 100 ML',
+	tagline: 'Struck match, cold room.',
+	phases: [
+		{
+			time: 'First fifteen minutes',
+			notes: ['Frankincense', 'Black pepper', 'Cade'],
+			text: 'The match before the smoke — bright and resinous, and gone almost at once.'
+		},
+		{
+			time: 'The next three hours',
+			notes: ['Birch tar', 'Labdanum', 'Orris root'],
+			text: 'The smoke settles and stops moving. Warmer underneath than it first lets on.'
+		},
+		{
+			time: "What's left by evening",
+			notes: ['Myrrh', 'Smoked vetiver', 'Ambergris'],
+			text: 'Barely there, and still in the room. What is left of a fire is not the fire.'
+		}
+	],
+	link: { label: 'See the collection', href: '/fragrances' },
+	video: umbrisVideo,
+	bottle: umbrisBottle,
+	bottleAlt: 'The ÆTHERA Umbris extrait de parfum, in dark glass clouded with red-lit smoke',
+	lean: 'left',
+	tone: { deep: '#0B0706', ink: '#F8F2DC', glow: '#C1452A', halo: 0.6 }
 };

@@ -2,7 +2,7 @@
 	import Hero from '$lib/components/hero.svelte';
 	import Beliefs from '$lib/components/beliefs.svelte';
 	import Collection from '$lib/components/collection.svelte';
-	import { viridis, aurelis } from '$lib/collections';
+	import { viridis, aurelis, umbris } from '$lib/collections';
 	import videoBg from '$lib/assets/abstract-video.mp4';
 	import { onMount } from 'svelte';
 	import Footer from '$lib/components/footer.svelte';
@@ -84,6 +84,8 @@
 		<Collection collection={viridis} />
 
 		<Collection collection={aurelis} />
+
+		<Collection collection={umbris} />
 	</main>
 	<Footer />
 </div>
