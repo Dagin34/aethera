@@ -61,6 +61,14 @@
 	const radius = $derived(2 * (1 - frame.progress)); // rem
 </script>
 
+<svelte:head>
+	<title>ÆTHERA — Atmosphere, bottled</title>
+	<meta
+		name="description"
+		content="ÆTHERA is a fragrance house composing extraits de parfum in small, unhurried batches."
+	/>
+</svelte:head>
+
 <div class="relative">
 	<div class="sticky top-0 -z-10 box-border h-screen w-full" style="padding: {frame.inset}px;">
 		<div class="relative h-full w-full overflow-hidden" style="border-radius: {radius}rem;">

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { frame } from '$lib/frame.svelte';
+	import { curtain } from '$lib/curtain.svelte';
 
 	const links = [
 		{ label: 'Fragrances', href: '/fragrances' },
@@ -46,6 +48,11 @@
 	/** The topmost thing painted under the bar decides the ink. A clipped curtain is
 	 *  not hit until it has actually risen past this line, which is exactly right. */
 	function sample() {
+		// The veil is the only thing under the bar while it is up, and it is dark.
+		if (curtain.covering) {
+			tone = 'dark';
+			return;
+		}
 		if (open || !mark) return;
 		const line = mark.getBoundingClientRect();
 		const hit = document
@@ -57,6 +64,7 @@
 	function setOpen(next: boolean) {
 		if (next === open) return;
 		open = next;
+		curtain.menuOpen = next;
 		clearTimeout(resample);
 
 		if (next) {
@@ -96,6 +104,17 @@
 			items[e.shiftKey ? items.length - 1 : 0].focus();
 		}
 	}
+
+	// The panel is the page transition while it is up, so it lifts on arrival
+	// rather than on the click that started the journey.
+	afterNavigate(() => setOpen(false));
+
+	// The veil covers and uncovers without any scrolling, so the ink has to be
+	// told to look again — nothing else would prompt it.
+	$effect(() => {
+		if (curtain.covering) tone = 'dark';
+		else sample();
+	});
 
 	onMount(() => {
 		let watch = 0;
@@ -174,8 +193,11 @@
 			{#each links as link, i (link.href)}
 				<li class="row flex items-baseline gap-4 md:gap-7" style="--i: {i};">
 					<span class="ordinal" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+					<!-- Deliberately not closed on click. The panel is already covering
+					     the screen, so it stays put and hides the page change behind
+					     it, then lifts once the new page has landed. -->
 					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-					<a href={link.href} class="rule link" onclick={() => setOpen(false)}>{link.label}</a>
+					<a href={link.href} class="rule link">{link.label}</a>
 				</li>
 			{/each}
 		</ul>
